@@ -14,9 +14,13 @@ def index(request):
 def analyser(request):
     djtext = request.GET.get('text', 'default')
     removepunch = request.GET.get('removepunch','off')
-
-    print(djtext)
-    print(removepunch)
+    capitlizefirst = request.GET.get('capitlizefirst','off')
+    newlineremover = request.GET.get('newlineremover','off')
+    spaceremover = request.GET.get('spaceremover','off')
+    countchar= request.GET.get('countchar','off')
+    print(countchar)
+    # print(djtext)
+    # print(removepunch)
     if removepunch == "on":
         #analyse = djtext
         punctuation = '''!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~'''
@@ -27,6 +31,34 @@ def analyser(request):
         param ={'porpose':'remove punctuation', 'analyse_text':analyse}
         return render( request,'analyser.html',param)
     # return render(request, 'index.html')
+    elif capitlizefirst == "on":
+        analyse = ""
+        for char in djtext:
+            analyse = analyse + char.upper()
+        param = {'porpose': 'capitalize text', 'analyse_text': analyse}
+        return render(request, 'analyser.html', param)
+    elif newlineremover == "on":
+        analyse = ""
+        for char in djtext:
+            if char != "/n":
+                analyse = analyse + char
+        param = {'porpose': 'line remover ', 'analyse_text': analyse}
+        return render(request, 'analyser.html', param)
+    elif spaceremover == "on" :
+        analyse = ""
+        for index , char in enumerate(djtext):
+            if not(djtext[index] == " " and djtext[index] == "  "):
+                analyse = analyse + char
+        param = {'porpose': 'space remover', 'analyse_text': analyse}
+        return render(request, 'analyser.html', param)
+    elif countchar == "on":
+        analyse = ""
+        counter =0
+        for char in djtext:
+            analyse = analyse + char
+            counter = counter + 1
+        param = {'porpose': 'count charattor  ', 'analyse_text': counter}
+        return render(request, 'analyser.html', param)
     else:
         return HttpResponse("error")
 
